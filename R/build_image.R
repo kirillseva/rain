@@ -11,22 +11,31 @@
 build_image <- function(model) {
   stopifnot(is(model, "tundraContainer"))
   machine_name <- "syberiaContainer"
-  dokk::machine_local(machine_name); on.exit(dokk::machine_rm(machine_name))
-  dir <- tempdir(); on.exit(unlink(dir), add = TRUE)
+  cmd <- parse_boot2docker()
+  dir <- tempdir(); on.exit(unlink(dir))
   saveRDS(model, paste0(dir, "/model"))
   dockerfile <- write_dockerfile(dir)
 
-  dokk::build_image(machine_name, dir, intern = FALSE,
-    params = pp("-t kirillseva/pshhhh"))
-  flags <- paste0("$(docker-machine config ", machine_name, ")")
-  system(paste0("docker ", flags, " push kirillseva/pshhhh"))
+  system(paste(cmd, "docker build -t kirillseva/pshhhh", dir))
+  system(paste(cmd, "docker push kirillseva/pshhhh"))
 }
 
 write_dockerfile <- function(dir) {
   template <- readLines(system.file("templates", "Dockerfile", package = "syberiaContainer"))
+  writeLines(readLines(system.file("templates", "start_server.R", package = "syberiaContainer")), paste0(dir,"/start_server.R"))
   data <- list(
-    model_path = paste0(dir, "/model"),
-    start_server_path = system.file("templates", "start_server.R", package = "syberiaContainer")
+    model_path = "model",
+    start_server_path = "start_server.R"
   )
   writeLines(whisker.render(template, data), paste0(dir, "/Dockerfile"))
+}
+
+parse_boot2docker <- function() {
+  system('boot2docker init')
+  start <- system('boot2docker start', intern = T)
+  cmd <- ""
+  for (i in 6:8) {
+    cmd <- paste(cmd, str_sub(start[i], 12))
+  }
+  cmd
 }
