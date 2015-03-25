@@ -16,12 +16,12 @@ denull <- function (lst) {
 }
 
 routes <- list(
-  "" = function(...) "OK",
   "/ping" = function(...) "pong",
   "/predict" = function(p, q) {
       score <- processSingleDataPoint(p, model)
       list(score = score)
-  }
+  },
+  function(...) "OK"
 )
 
 microserver::run_server(routes, 8103)
