@@ -1,5 +1,6 @@
 #!usr/bin/env Rscript
 interactive <- function (...) TRUE
+library(methods)
 
 model <- readRDS("/root/model")
 
