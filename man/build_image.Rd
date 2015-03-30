@@ -4,7 +4,19 @@
 \alias{build_image}
 \title{Build a docker image with server that serves model$predict}
 \usage{
-build_image(model)
+build_image(model, repository, dockerfile = NULL, server_script = NULL)
+}
+\arguments{
+\item{model}{tundraContainer. A tundra container that contains necessary munge
+procedures and the predict function.}
+
+\item{repository}{character. Where will you push your image?}
+
+\item{dockerfile}{character optional. You can specify a custom dockerfile
+instead of the default one shipped with kunteynir.}
+
+\item{server_script}{character optional. You can specify a custom server script
+that will be used to start serving the model inside the docker container.}
 }
 \description{
 Available routes:

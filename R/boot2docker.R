@@ -26,11 +26,3 @@ boot2docker_ver <- function(){
   ver <- gsub("^.*?v([0-9\\.]+).*", "\\1", out[1])
   as.package_version(ver)
 }
-
-pluck <- function(x, name, type) {
-  if (missing(type)) {
-    lapply(x, "[[", name)
-  } else {
-    vapply(x, "[[", name, FUN.VALUE = type)
-  }
-}
