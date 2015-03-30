@@ -15,13 +15,13 @@ build_image <- function(model) {
   saveRDS(model, paste0(dir, "/model"))
   dockerfile <- write_dockerfile(dir)
 
-  system(paste("docker build -t kirillseva/pshhhh", dir))
-  system(paste("docker push kirillseva/pshhhh"))
+  system2("docker", paste("build -t kirillseva/pshhhh", dir))
+  system2("docker", paste("push kirillseva/pshhhh"))
 }
 
 write_dockerfile <- function(dir) {
-  template <- readLines(system.file("templates", "Dockerfile", package = "syberiaContainer"))
-  writeLines(readLines(system.file("templates", "start_server.R", package = "syberiaContainer")), paste0(dir,"/start_server.R"))
+  template <- readLines(system.file("templates", "Dockerfile", package = "kunteynir"))
+  writeLines(readLines(system.file("templates", "start_server.R", package = "kunteynir")), paste0(dir,"/start_server.R"))
   data <- list(
     model_path = "model",
     start_server_path = "start_server.R"
