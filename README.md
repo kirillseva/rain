@@ -1,9 +1,12 @@
-syberiaContainer: the R package that could
+kunteynir
 ===========
 
-This repository is based off a basic template for R packages that already includes
-Travis and [covr](http://github.com/jimhester/covr) integration.
+Convert a tundraContainer into a dockerized REST server.
 
-Do not forget to set those up at https://travis-ci.org/ and https://coveralls.io/
-
-But soon it will be much more than that!
+Available routes:
+-----
+HTTP request | endpoint                     | response
+-------------|------------------------------|---------
+GET/POST     | /                            | "OK"
+GET/POST     | /ping                        | "pong"
+GET/POST     | /predict (with JSON payload) | serialized output of predict as JSON

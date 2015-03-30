@@ -1,7 +1,7 @@
-Package: syberiaContainer
+Package: kunteynir
 Type: Package
-Title: syberiaContainer (http://github.com/kirillseva/syberiaContainer)
-Description: Describe the package.
+Title: kunteynir (http://github.com/kirillseva/kunteynir)
+Description: Convert a tundraContainer into a dockerized REST server.
 Version: 0.1.0
 Author: Kirill Sevastyanenko <kirillseva@gmail.com>
 Maintainer: Kirill Sevastyanenko <kirillseva@gmail.com>
