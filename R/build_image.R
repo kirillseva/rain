@@ -11,13 +11,12 @@
 build_image <- function(model) {
   stopifnot(is(model, "tundraContainer"))
   machine_name <- "syberiaContainer"
-  cmd <- parse_boot2docker()
   dir <- tempdir(); on.exit(unlink(dir))
   saveRDS(model, paste0(dir, "/model"))
   dockerfile <- write_dockerfile(dir)
 
-  system(paste(cmd, "docker build -t kirillseva/pshhhh", dir))
-  system(paste(cmd, "docker push kirillseva/pshhhh"))
+  system(paste("docker build -t kirillseva/pshhhh", dir))
+  system(paste("docker push kirillseva/pshhhh"))
 }
 
 write_dockerfile <- function(dir) {
@@ -28,14 +27,4 @@ write_dockerfile <- function(dir) {
     start_server_path = "start_server.R"
   )
   writeLines(whisker.render(template, data), paste0(dir, "/Dockerfile"))
-}
-
-parse_boot2docker <- function() {
-  system('boot2docker init')
-  start <- system('boot2docker start', intern = T)
-  cmd <- ""
-  for (i in 6:8) {
-    cmd <- paste(cmd, str_sub(start[i], 12))
-  }
-  cmd
 }
