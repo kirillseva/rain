@@ -9,23 +9,27 @@
 #' @importFrom productivus pp
 #' @param model tundraContainer. A tundra container that contains necessary munge
 #'   procedures and the predict function.
-#' @param repository character. Where will you push your image?
+#' @param name character. name of the resulting docker image
+#' @param registry character. Where will you push your image? Leave blank for
+#'   pushing to docker hub, or specify your private registry.
 #' @param dockerfile character optional. You can specify a custom dockerfile
 #'   instead of the default one shipped with kunteynir.
 #' @param server_script character optional. You can specify a custom server script
 #'   that will be used to start serving the model inside the docker container.
 #' @export
-build_image <- function(model, repository, dockerfile = NULL, server_script = NULL) {
+build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL) {
   stopifnot(is(model, "tundraContainer"))
+  if(missing(name)) stop("You need to name your image, silly. Be professional.")
   dir <- tempdir(); on.exit(unlink(dir))
   saveRDS(model, paste0(dir, "/model"))
   build_args <- list(dir = dir)
   if (!is.null(dockerfile)) build_args$dockerfile <- dockerfile
   if (!is.null(server_script)) build_args$server_script <- server_script
   dockerfile <- do.call(write_dockerfile, build_args)
+  if(identical(registry, '')) sep <- '' else "/"
 
-  system2("docker", paste("build -t", repository, dir))
-  system2("docker", paste("push", repository))
+  system2("docker", paste("build -t", name, dir))
+  system2("docker", paste0("push ", registry, sep, name))
 }
 
 write_dockerfile <- function(dir,

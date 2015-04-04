@@ -2,7 +2,7 @@ Package: kunteynir
 Type: Package
 Title: kunteynir (http://github.com/kirillseva/kunteynir)
 Description: Convert a tundraContainer into a dockerized REST server.
-Version: 0.1.0
+Version: 0.2.0
 Author: Kirill Sevastyanenko <kirillseva@gmail.com>
 Maintainer: Kirill Sevastyanenko <kirillseva@gmail.com>
 Authors@R: c(person("Kirill", "Sevastyanenko",
