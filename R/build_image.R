@@ -26,10 +26,11 @@ build_image <- function(model, name, registry = '', dockerfile = NULL, server_sc
   if (!is.null(dockerfile)) build_args$dockerfile <- dockerfile
   if (!is.null(server_script)) build_args$server_script <- server_script
   dockerfile <- do.call(write_dockerfile, build_args)
-  if(identical(registry, '')) sep <- '' else sep <- "/"
+  if(identical(registry, '')) separator <- '' else separator <- "/"
 
-  system2("docker", paste("build -t", name, dir))
-  system2("docker", paste0("push ", registry, sep, name))
+  cat("Preparing to build: ", registry, separator, name, "\n", sep="")
+  system2("docker", paste0("build -t ", registry, separator, name, " ", dir))
+  system2("docker", paste0("push ", registry, separator, name))
 }
 
 write_dockerfile <- function(dir,
