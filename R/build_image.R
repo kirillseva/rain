@@ -26,7 +26,7 @@ build_image <- function(model, name, registry = '', dockerfile = NULL, server_sc
   if (!is.null(dockerfile)) build_args$dockerfile <- dockerfile
   if (!is.null(server_script)) build_args$server_script <- server_script
   dockerfile <- do.call(write_dockerfile, build_args)
-  if(identical(registry, '')) sep <- '' else "/"
+  if(identical(registry, '')) sep <- '' else sep <- "/"
 
   system2("docker", paste("build -t", name, dir))
   system2("docker", paste0("push ", registry, sep, name))
