@@ -1,3 +1,3 @@
 library("testthat")
-library("syberiaContainer")
-test_check("syberiaContainer")
+library("kunteynir")
+test_check("kunteynir")
