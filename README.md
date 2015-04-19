@@ -1,4 +1,4 @@
-kunteynir
+kunteynir ![Release Tag](https://img.shields.io/github/tag/kirillseva/kunteynir.svg)
 ===========
 
 Convert a tundraContainer into a dockerized REST server.
