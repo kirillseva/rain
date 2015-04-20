@@ -1,3 +1,7 @@
+# Version 0.2.1
+
+  * Bugfix release.
+
 # Version 0.2.0
 
   * Support private registries.
