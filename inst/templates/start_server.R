@@ -8,8 +8,7 @@ processSingleDataPoint <- function(datum, model) {
   if (is.list(datum)) {
     datum <- data.frame(denull(datum), stringsAsFactors=FALSE)
   }
-  datum <- mungebits::munge(datum, model$munge_procedure)
-  model$predict(datum, verbose = TRUE)
+  model$predict(datum)
 }
 
 denull <- function (lst) {
@@ -20,7 +19,7 @@ routes <- list(
   "/ping" = function(...) "pong",
   "/predict" = function(p, q) {
       score <- processSingleDataPoint(p, model)
-      list(score = score)
+      score
   },
   function(...) "OK"
 )

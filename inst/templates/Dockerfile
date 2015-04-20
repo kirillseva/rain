@@ -2,6 +2,8 @@ FROM kirillseva/avant-r
 
 MAINTAINER kirillseva "https://github.com/kirillseva"
 
+RUN echo {{{timestamp}}}
+
 ADD {{{model_path}}} /root/model
 
 ADD {{{start_server_path}}} /root/start_server.R

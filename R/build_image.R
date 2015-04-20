@@ -1,4 +1,4 @@
-#' Build a docker image with server that serves model$predict
+#' Build a docker image with server that serves model$predict and push it to a registry.
 #'
 #' Available routes:
 #'
@@ -40,7 +40,8 @@ write_dockerfile <- function(dir,
   template <- readLines(dockerfile)
   data <- list(
     model_path = "model",
-    start_server_path = "start_server.R"
+    start_server_path = "start_server.R",
+    timestamp = Sys.time()
   )
   writeLines(whisker.render(template, data), paste0(dir, "/Dockerfile"))
   writeLines(readLines(server_script), paste0(dir,"/start_server.R"))

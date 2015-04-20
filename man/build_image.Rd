@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_image.R
 \name{build_image}
 \alias{build_image}
-\title{Build a docker image with server that serves model$predict}
+\title{Build a docker image with server that serves model$predict and push it to a registry.}
 \usage{
 build_image(model, name, registry = "", dockerfile = NULL,
   server_script = NULL)
