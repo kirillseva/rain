@@ -18,17 +18,27 @@
 #'   that will be used to start serving the model inside the docker container.
 #' @export
 build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL) {
+  ## The goal of this package is to provide an easy way for analysts to convert
+  ## their models into deployable applications. This is achieved by creating a
+  ## Docker image that would serve the model's predictions as a RESTful service.
+  ## By default the server will listen on port 8103.
+
+  ## We insist that the model is a tundraContainer.
+  ## Check out https://github.com/robertzk/tundra
   stopifnot(is(model, "tundraContainer"))
-  if(missing(name)) stop("You need to name your image, silly. Be professional.")
+  if(missing(name)) stop("You need to name your image.")
   dir <- tempdir(); on.exit(unlink(dir))
   saveRDS(model, paste0(dir, "/model"))
   build_args <- list(dir = dir)
+  ## You can provide your custom dockerfile and server script, instead of the ones
+  ## in `inst/templates`.
   if (!is.null(dockerfile)) build_args$dockerfile <- dockerfile
   if (!is.null(server_script)) build_args$server_script <- server_script
   dockerfile <- do.call(write_dockerfile, build_args)
   if(identical(registry, '')) separator <- '' else separator <- "/"
 
   cat("Preparing to build: ", registry, separator, name, "\n", sep="")
+  ## Build and push to the registry.
   system2("docker", paste0("build -t ", registry, separator, name, " ", dir))
   system2("docker", paste0("push ", registry, separator, name))
 }

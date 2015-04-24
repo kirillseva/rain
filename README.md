@@ -15,7 +15,10 @@ Usage
 ----
 ```r
 model <- readRDS("path/to/model/object")
-build_image(model, "mySuperGlmModel") # use docker hub, default options
-build_image(model, "veryCustomized", "myregistry.com",
+build_image(model, "kirillseva/mySuperGlmModel") # use docker hub, default options
+build_image(model, "kirillseva/veryCustomized", "myregistry.com",
   "path/to/dockerfile", "path/to/server/script") # custom registry and configs
 ```
+
+By default, the server will listen on port 8103. You can run it as following:
+`docker run -p 8103:8103 kirillseva/mySuperGlmModel`
