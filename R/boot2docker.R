@@ -1,6 +1,6 @@
 ## If we're on Mac and Windows, we're using boot2docker, and we need to run the
 ## equivalent of `$(boot2docker shellinit)`.
-## Shamelessly stolen from wch/harbor
+## Shamelessly stolen from from [Winston Chang's harbor](https://github.com/wch/harbor)
 boot2docker_shellinit <- function() {
   if (!(Sys.info()["sysname"] %in% c("Darwin", "Windows")))
     return()
