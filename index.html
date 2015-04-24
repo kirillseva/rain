@@ -90,15 +90,15 @@
         </div>
         <div class="section">
           <div class="markdown markdown-body">
-            
+            <p>If we&#39;re on Mac and Windows, we&#39;re using boot2docker, and we need to run the
+equivalent of <code>$(boot2docker shellinit)</code>.
+Shamelessly stolen from wch/harbor</p>
+
           </div>
 
           <div class="code">
             <pre>
-              <code class="R"><span class="spacer"># If we're on Mac and Windows, we're using boot2docker, and we need to run the
-# equivalent of `$(boot2docker shellinit)`.
-# Shamelessly stolen from wch/harbor
-boot2docker_shellinit <- function() {
+              <code class="R"><span class="spacer">boot2docker_shellinit <- function() {
   if (!(Sys.info()["sysname"] %in% c("Darwin", "Windows")))
     return()
   if (Sys.which("boot2docker") == "")
@@ -106,10 +106,20 @@ boot2docker_shellinit <- function() {
 
   if (boot2docker_ver() < "1.3.0")
     stop("Running boot2docker locally requires boot2docker >= 1.3.0")
+</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <p>Run shellinit and capture the output, which are comands setting env vars
+for sh. We need read them in and set them from R.</p>
 
-  # Run shellinit and capture the output, which are comands setting env vars
-  # for sh. We need read them in and set them from R.
-  envvars <- system2("boot2docker", "shellinit", stdout = TRUE)
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">  envvars <- system2("boot2docker", "shellinit", stdout = TRUE)
   if (length(envvars) != 0) {
     envvars <- sub("^ +export +", "", envvars)
     envvars <- strsplit(envvars, "=")
