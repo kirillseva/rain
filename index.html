@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="description" content="Convert a tundraContainer into a dockerized REST server.">
+
+    <title>kunteynir (http://github.com/kirillseva/kunteynir)</title>
+
+    <link rel="stylesheet" media="all" href="stylesheets/rocco.css" />
+    <link rel="stylesheet" media="all" href="stylesheets/github-markdown.css" />
+
+    <script src="assets/highlight.pack.js"></script>
+    <script type="text/javascript">
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <style type="text/css">
+      body {
+        padding: 0;
+        margin: 0;
+      }
+
+      div.code-background {
+        float: right;
+        position: fixed;
+        z-index: -1;
+        height: 100%;
+        background-color: #f8f8ff;
+        width: 60%;
+        right: 0px;
+      }
+
+      div.section {
+        clear: both;
+        margin: 0; padding: 0;
+      }
+
+      div.code {
+        float: right;
+        width: 60%;
+      }
+
+      code.R {
+        font-size: 1.2em;
+        line-height: 2em;
+        margin-top: 0em;
+        margin-bottom: -2em;
+        padding-top: 0;
+        margin-top: -1em;
+      }
+
+      code.R > span.spacer {
+        position: relative;
+      }
+
+      div.code > pre {
+        margin: 0;
+        padding-left: 2em;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      div.markdown {
+        padding: 1em;
+        padding-top: 0;
+        background: #fff;
+        float: left;
+        width: 35%;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div class="container">
+
+      <div class="code-background"></div>
+
+        <div class="section">
+          <div class="markdown markdown-body">
+            <h1>boot2docker.R</h1>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer"></span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer"># If we're on Mac and Windows, we're using boot2docker, and we need to run the
+# equivalent of `$(boot2docker shellinit)`.
+# Shamelessly stolen from wch/harbor
+boot2docker_shellinit <- function() {
+  if (!(Sys.info()["sysname"] %in% c("Darwin", "Windows")))
+    return()
+  if (Sys.which("boot2docker") == "")
+    return()
+
+  if (boot2docker_ver() < "1.3.0")
+    stop("Running boot2docker locally requires boot2docker >= 1.3.0")
+
+  # Run shellinit and capture the output, which are comands setting env vars
+  # for sh. We need read them in and set them from R.
+  envvars <- system2("boot2docker", "shellinit", stdout = TRUE)
+  if (length(envvars) != 0) {
+    envvars <- sub("^ +export +", "", envvars)
+    envvars <- strsplit(envvars, "=")
+    envvars <- setNames(pluck(envvars, 2), pluck(envvars, 1))
+    do.call(Sys.setenv, envvars)
+  }
+}
+
+boot2docker_ver <- function(){
+  out <- system2("boot2docker", "version", stdout = TRUE)
+  ver <- gsub("^.*?v([0-9\\.]+).*", "\\1", out[1])
+  as.package_version(ver)
+}</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <h1>build_image.R</h1>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer"></span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">#' Build a docker image with server that serves model$predict and push it to a registry.
+#'
+#' Available routes:
+#'
+#' GET/POST          /            "OK"
+#' GET/POST          /ping        "pong"
+#' GET/POST          /predict     serialized output of predict as JSON
+#'
+#' @importFrom productivus pp
+#' @param model tundraContainer. A tundra container that contains necessary munge
+#'   procedures and the predict function.
+#' @param name character. name of the resulting docker image
+#' @param registry character. Where will you push your image? Leave blank for
+#'   pushing to docker hub, or specify your private registry.
+#' @param dockerfile character optional. You can specify a custom dockerfile
+#'   instead of the default one shipped with kunteynir.
+#' @param server_script character optional. You can specify a custom server script
+#'   that will be used to start serving the model inside the docker container.
+#' @export
+build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL) {</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <p>The goal of this package is to provide an easy way for analysts to convert
+their models into deployable applications. This is achieved by creating a
+Docker image that would serve the model&#39;s predictions as a RESTful service.
+By default the server will listen on port 8103.</p>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer"></span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <p>We insist that the model is a tundraContainer.
+Check out <a href="https://github.com/robertzk/tundra">https://github.com/robertzk/tundra</a></p>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">  stopifnot(is(model, "tundraContainer"))
+  if(missing(name)) stop("You need to name your image.")
+  dir <- tempdir(); on.exit(unlink(dir))
+  saveRDS(model, paste0(dir, "/model"))
+  build_args <- list(dir = dir)</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <p>You can provide your custom dockerfile and server script, instead of the ones
+in <code>inst/templates</code>.</p>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">  if (!is.null(dockerfile)) build_args$dockerfile <- dockerfile
+  if (!is.null(server_script)) build_args$server_script <- server_script
+  dockerfile <- do.call(write_dockerfile, build_args)
+  if(identical(registry, '')) separator <- '' else separator <- "/"
+
+  cat("Preparing to build: ", registry, separator, name, "\n", sep="")</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <p>Build and push to the registry.</p>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">  system2("docker", paste0("build -t ", registry, separator, name, " ", dir))
+  system2("docker", paste0("push ", registry, separator, name))
+}
+
+write_dockerfile <- function(dir,
+  dockerfile = system.file("templates", "Dockerfile", package = "kunteynir"),
+  server_script = system.file("templates", "start_server.R", package = "kunteynir")) {
+
+  template <- readLines(dockerfile)
+  data <- list(
+    model_path = "model",
+    start_server_path = "start_server.R",
+    timestamp = Sys.time()
+  )
+  writeLines(whisker.render(template, data), paste0(dir, "/Dockerfile"))
+  writeLines(readLines(server_script), paste0(dir,"/start_server.R"))
+}</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <h1>kunteynir-package.R</h1>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer"></span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">#' Convert a tundraContainer into a dockerized REST server.
+#'
+#' @name kunteynir
+#' @import stringr methods whisker
+#' @docType package
+NULL</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <h1>pending.R</h1>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer"></span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">pending <- function() {
+  TRUE
+}
+</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <h1>utils.R</h1>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer"></span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">pluck <- function(x, name, type) {
+  if (missing(type)) {
+    lapply(x, "[[", name)
+  } else {
+    vapply(x, "[[", name, FUN.VALUE = type)
+  }
+}</span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            <h1>zzz.R</h1>
+
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer"></span></code>
+            </pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="markdown markdown-body">
+            
+          </div>
+
+          <div class="code">
+            <pre>
+              <code class="R"><span class="spacer">.onLoad <- function(libname, pkgname) {
+  if (Sys.info()["sysname"] %in% c("Darwin", "Windows")) {
+    boot2docker_shellinit()
+  }
+}</span></code>
+            </pre>
+          </div>
+        </div>
+
+      <div class="section">
+      </div>
+
+    </div>
+  </body>
+</html>
+
