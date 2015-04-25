@@ -1,4 +1,4 @@
-kunteynir [![Build Status](https://travis-ci.org/peterhurford/batchman.svg?branch=master)](https://travis-ci.org/kirillseva/kunteynir) ![Release Tag](https://img.shields.io/github/tag/kirillseva/kunteynir.svg) [![Documentation](https://img.shields.io/badge/rocco--docs-%E2%9C%93-blue.svg)](http://kirillseva.github.io/kunteynir/)
+kunteynir [![Build Status](https://img.shields.io/travis/kirillseva/kunteynir.svg)](https://travis-ci.org/kirillseva/kunteynir) ![Release Tag](https://img.shields.io/github/tag/kirillseva/kunteynir.svg) [![Documentation](https://img.shields.io/badge/rocco--docs-%E2%9C%93-blue.svg)](http://kirillseva.github.io/kunteynir/)
 ===========
 
 Convert a tundraContainer into a dockerized REST server.
