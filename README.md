@@ -1,6 +1,8 @@
 kunteynir [![Build Status](https://img.shields.io/travis/kirillseva/kunteynir.svg)](https://travis-ci.org/kirillseva/kunteynir) ![Release Tag](https://img.shields.io/github/tag/kirillseva/kunteynir.svg) [![Documentation](https://img.shields.io/badge/rocco--docs-%E2%9C%93-blue.svg)](http://kirillseva.github.io/kunteynir/)
 ===========
 
+![Kunteynir logo](https://pp.vk.me/c622723/v622723920/1809a/v0Q_2jo9Xpw.jpg)
+
 Convert a tundraContainer into a dockerized REST server.
 
 Available routes:
