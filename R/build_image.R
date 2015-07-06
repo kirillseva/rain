@@ -16,6 +16,7 @@
 #'   instead of the default one shipped with kunteynir.
 #' @param server_script character optional. You can specify a custom server script
 #'   that will be used to start serving the model inside the docker container.
+#' @importFrom RDS2 saveRDS
 #' @export
 build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL) {
   ## The goal of this package is to provide an easy way for analysts to convert
@@ -28,7 +29,7 @@ build_image <- function(model, name, registry = '', dockerfile = NULL, server_sc
   stopifnot(is(model, "tundraContainer"))
   if(missing(name)) stop("You need to name your image.")
   dir <- tempdir(); on.exit(unlink(dir))
-  saveRDS(model, paste0(dir, "/model"))
+  RDS2::saveRDS(model, paste0(dir, "/model"))
   build_args <- list(dir = dir)
   ## You can provide your custom dockerfile and server script, instead of the ones
   ## in `inst/templates`.
