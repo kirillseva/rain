@@ -7,7 +7,7 @@ before_install:
 install:
 - "./travis-tool.sh install_deps"
 - "./travis-tool.sh install_r microbenchmark knitr testthat whisker"
-- "./travis-tool.sh install_github jimhester/covr robertzk/productivus"
+- "./travis-tool.sh install_github jimhester/covr robertzk/productivus robertzk/rds2"
 script: "./travis-tool.sh run_tests"
 after_failure:
 - "./travis-tool.sh dump_logs"
