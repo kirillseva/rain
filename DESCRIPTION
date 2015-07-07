@@ -15,7 +15,8 @@ Imports:
     stringr,
     methods,
     productivus,
-    whisker
+    whisker,
+    RDS2
 Suggests:
     knitr,
     microbenchmark,
