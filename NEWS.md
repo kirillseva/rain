@@ -1,3 +1,7 @@
+# Version 0.2.5
+
+  * Add ability to pass in a directory with helper files, like nginx configs.
+
 # Version 0.2.3
 
   * Bugfix release.

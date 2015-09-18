@@ -18,7 +18,7 @@
 #'   that will be used to start serving the model inside the docker container.
 #' @importFrom RDS2 saveRDS
 #' @export
-build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL) {
+build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL, helper_dir = NULL) {
   ## The goal of this package is to provide an easy way for analysts to convert
   ## their models into deployable applications. This is achieved by creating a
   ## Docker image that would serve the model's predictions as a RESTful service.
@@ -35,6 +35,7 @@ build_image <- function(model, name, registry = '', dockerfile = NULL, server_sc
   ## in `inst/templates`.
   if (!is.null(dockerfile)) build_args$dockerfile <- dockerfile
   if (!is.null(server_script)) build_args$server_script <- server_script
+  if (!is.null(helper_dir)) system(paste("cp -r", helper_dir, dir))
   dockerfile <- do.call(write_dockerfile, build_args)
   if(identical(registry, '')) separator <- '' else separator <- "/"
 
