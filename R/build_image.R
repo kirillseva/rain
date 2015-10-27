@@ -16,6 +16,7 @@
 #'   instead of the default one shipped with kunteynir.
 #' @param server_script character optional. You can specify a custom server script
 #'   that will be used to start serving the model inside the docker container.
+#' @param dir character. Directory in which docker build will be called. Leave blank for tempdir.
 #' @importFrom RDS2 saveRDS
 #' @export
 build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL, dir = NULL) {
