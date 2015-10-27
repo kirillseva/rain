@@ -1,3 +1,7 @@
+# Version 0.2.5
+
+  * Custom dir.
+
 # Version 0.2.3
 
   * Bugfix release.
