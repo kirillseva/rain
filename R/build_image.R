@@ -18,7 +18,7 @@
 #'   that will be used to start serving the model inside the docker container.
 #' @importFrom RDS2 saveRDS
 #' @export
-build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL) {
+build_image <- function(model, name, registry = '', dockerfile = NULL, server_script = NULL, dir = NULL) {
   ## The goal of this package is to provide an easy way for analysts to convert
   ## their models into deployable applications. This is achieved by creating a
   ## Docker image that would serve the model's predictions as a RESTful service.
@@ -27,8 +27,8 @@ build_image <- function(model, name, registry = '', dockerfile = NULL, server_sc
   ## We insist that the model is a tundraContainer.
   ## Check out https://github.com/robertzk/tundra
   stopifnot(is(model, "tundraContainer"))
-  if(missing(name)) stop("You need to name your image.")
-  dir <- tempdir(); on.exit(unlink(dir))
+  if (missing(name)) stop("You need to name your image.")
+  if (is.null(dir)) { dir <- tempdir(); on.exit(unlink(dir)) }
   RDS2::saveRDS(model, paste0(dir, "/model"))
   build_args <- list(dir = dir)
   ## You can provide your custom dockerfile and server script, instead of the ones
