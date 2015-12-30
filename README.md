@@ -1,7 +1,7 @@
-kunteynir [![Build Status](https://img.shields.io/travis/kirillseva/kunteynir.svg)](https://travis-ci.org/kirillseva/kunteynir) ![Release Tag](https://img.shields.io/github/tag/kirillseva/kunteynir.svg) [![Documentation](https://img.shields.io/badge/rocco--docs-%E2%9C%93-blue.svg)](http://kirillseva.github.io/kunteynir/)
+rain [![Build Status](https://img.shields.io/travis/kirillseva/rain.svg)](https://travis-ci.org/kirillseva/rain) ![Release Tag](https://img.shields.io/github/tag/kirillseva/rain.svg) [![Documentation](https://img.shields.io/badge/rocco--docs-%E2%9C%93-blue.svg)](http://kirillseva.github.io/rain/)
 ===========
 
-![Kunteynir logo](https://pp.vk.me/c622723/v622723920/1809a/v0Q_2jo9Xpw.jpg)
+![logo](http://www.clipartsheep.com/images/377/there-is-35-happy-rain-free-cliparts-all-used-for-clipart.png)
 
 Convert a tundraContainer into a dockerized REST server.
 
@@ -12,6 +12,8 @@ HTTP request | endpoint                     | response
 GET/POST     | /                            | "OK"
 GET/POST     | /ping                        | "pong"
 GET/POST     | /predict (with JSON payload) | serialized output of predict as JSON
+
+You can customize both your server script and your dockerfile if you need additional functionality.
 
 Usage
 ----
