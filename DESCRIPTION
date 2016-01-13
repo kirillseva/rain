@@ -1,6 +1,6 @@
-Package: kunteynir
+Package: rain
 Type: Package
-Title: kunteynir (http://github.com/kirillseva/kunteynir)
+Title: rain (http://github.com/kirillseva/rain)
 Description: Convert a tundraContainer into a dockerized REST server.
 Version: 0.2.5
 Author: Kirill Sevastyanenko <kirillseva@gmail.com>
