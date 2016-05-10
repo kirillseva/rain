@@ -1,3 +1,3 @@
 library("testthat")
-library("kunteynir")
-test_check("kunteynir")
+library("rain")
+test_check("rain")

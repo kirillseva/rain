@@ -1,6 +1,6 @@
 #' Convert a tundraContainer into a dockerized REST server.
 #'
-#' @name kunteynir
+#' @name rain
 #' @import stringr methods whisker
 #' @docType package
 NULL

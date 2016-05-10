@@ -22,3 +22,4 @@ Suggests:
     microbenchmark,
     testthat
 Roxygen: list(wrap = FALSE)
+RoxygenNote: 5.0.1.9000

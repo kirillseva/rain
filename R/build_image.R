@@ -13,7 +13,7 @@
 #' @param registry character. Where will you push your image? Leave blank for
 #'   pushing to docker hub, or specify your private registry.
 #' @param dockerfile character optional. You can specify a custom dockerfile
-#'   instead of the default one shipped with kunteynir.
+#'   instead of the default one shipped with rain.
 #' @param server_script character optional. You can specify a custom server script
 #'   that will be used to start serving the model inside the docker container.
 #' @param dir character. Directory in which docker build will be called. Leave blank for tempdir.
@@ -46,8 +46,8 @@ build_image <- function(model, name, registry = '', dockerfile = NULL, server_sc
 }
 
 write_dockerfile <- function(dir,
-  dockerfile = system.file("templates", "Dockerfile", package = "kunteynir"),
-  server_script = system.file("templates", "start_server.R", package = "kunteynir")) {
+  dockerfile = system.file("templates", "Dockerfile", package = "rain"),
+  server_script = system.file("templates", "start_server.R", package = "rain")) {
 
   template <- readLines(dockerfile)
   data <- list(
